@@ -7,7 +7,6 @@ HELIOS_WAR_PATH="~/web/lab2"
 if ./gradlew clean build; then
     echo "Copying WAR file..."
     scp $LOCAL_WAR_PATH itmo:$HELIOS_WAR_PATH
-    echo "Starting application..."
-    ssh itmo "cd $HELIOS_WILDFLY_PATH && ./bin/jboss-cli.sh --connect --commands='deploy --force $HELIOS_WAR_PATH'" && echo "Done!"
+    echo "Done!"
     exit 0  
 fi

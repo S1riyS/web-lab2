@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -18,7 +19,7 @@ import ru.s1riys.lab2.exceptions.ValidationException;
 import ru.s1riys.lab2.validators.ConsistencyValidator;
 import ru.s1riys.lab2.validators.ValuesValidator;
 
-@WebFilter(servletNames = { "AreaCheck" })
+@WebFilter(servletNames = { "AreaCheck" }, dispatcherTypes = { DispatcherType.REQUEST, DispatcherType.FORWARD })
 public class ValidationFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
