@@ -1,3 +1,4 @@
+import { HistoryManager } from "./history.js";
 import Validator from "./validator.js";
 
 export default class FormService {
@@ -15,7 +16,21 @@ export default class FormService {
 
         // Sending request to server
         let data = this.getFormData();
-        window.location.replace("./controller?" + $.param(data));
+        $.ajax({
+            url: "./controller?" + $.param(data),
+            type: "GET",
+            success: function (data) {
+                HistoryManager.addRecord(data.x, data.y, data.r, data.isHit, data.createdAt, data.scriptTime);
+            },
+            error: function (xhr, status, error) {
+                swal(
+                    `Ошибка ${xhr.status}`,
+                    `Во время выполнения запроса произошла ошибка\n(${xhr.responseJSON.message})`,
+                    "error"
+                )
+            }
+        });
+        // window.location.replace("./controller?" + $.param(data));
     }
 
     static getX() {

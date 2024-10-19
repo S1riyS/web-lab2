@@ -19,8 +19,10 @@ import ru.s1riys.lab2.exceptions.ValidationException;
 import ru.s1riys.lab2.validators.ConsistencyValidator;
 import ru.s1riys.lab2.validators.ValuesValidator;
 
-@WebFilter(servletNames = { "AreaCheck" }, dispatcherTypes = { DispatcherType.REQUEST, DispatcherType.FORWARD })
+@WebFilter(servletNames = { "AreaCheck" }, dispatcherTypes = { DispatcherType.FORWARD })
 public class ValidationFilter extends HttpFilter {
+    private final ValuesValidator valuesValidator = new ValuesValidator();
+
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -39,9 +41,7 @@ public class ValidationFilter extends HttpFilter {
             Float x = ConsistencyValidator.toFloat(request.getParameter("x"), "x");
             Float y = ConsistencyValidator.toFloat(request.getParameter("y"), "y");
             Float r = ConsistencyValidator.toFloat(request.getParameter("r"), "r");
-
-            ValuesValidator valuesValidator = new ValuesValidator(x, y, r);
-            valuesValidator.check();
+            valuesValidator.check(x, y, r);
 
             chain.doFilter(request, response);
 

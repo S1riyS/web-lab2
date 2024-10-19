@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import ru.s1riys.Config;
+import ru.s1riys.lab2.Config;
 import ru.s1riys.lab2.models.ResultsListBean;
 
 @WebServlet(name = "History", urlPatterns = "/history")

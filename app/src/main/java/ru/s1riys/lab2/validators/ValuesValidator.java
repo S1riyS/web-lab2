@@ -6,21 +6,16 @@ import java.util.List;
 import ru.s1riys.lab2.exceptions.ValidationException;
 
 public class ValuesValidator {
-    private final Float x;
-    private final BigDecimal y;
-    private final Float r;
+    private BigDecimal x;
+    private BigDecimal y;
+    private Float r;
 
-    public ValuesValidator(Float x, Float y, Float r) {
-        this.x = x;
-        this.y = new BigDecimal(y);
-        this.r = r;
-    }
-
-    private final List<Float> ALLOWED_X_VALUES = List.of(-2f, -1.5f, -1f, -0.5f, 0f, 0.5f, 1f, 1.5f, 2f);
     private final List<Float> ALLOWED_R_VALUES = List.of(1f, 2f, 3f, 4f, 5f);
 
     private Boolean checkX() {
-        return ALLOWED_X_VALUES.contains(this.x);
+        Boolean geNegative2 = new BigDecimal("-2").compareTo(this.x) <= 0;
+        Boolean lePositive2 = this.x.compareTo(new BigDecimal("2")) <= 0;
+        return geNegative2 && lePositive2;
     }
 
     private Boolean checkY() {
@@ -33,7 +28,11 @@ public class ValuesValidator {
         return ALLOWED_R_VALUES.contains(this.r);
     }
 
-    public void check() throws ValidationException {
+    public void check(Float x, Float y, Float r) throws ValidationException {
+        this.x = new BigDecimal(x);
+        this.y = new BigDecimal(y);
+        this.r = r;
+
         Boolean parametersAreValid = checkX() && checkY() && checkR();
         if (!parametersAreValid)
             throw new ValidationException("Invalid parameters");

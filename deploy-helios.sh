@@ -10,3 +10,5 @@ if ./gradlew clean build; then
     echo "Done!"
     exit 0  
 fi
+
+# PqZs+7641

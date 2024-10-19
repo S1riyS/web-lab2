@@ -1,4 +1,5 @@
 import FormService from "./form.js";
+import { HistoryManager } from "./history.js";
 
 const D = 125;
 const W = 400;
@@ -151,13 +152,31 @@ export default class Graph {
         const scaledY = (y / D) * r;
         console.log(scaledX, scaledY, r)
 
-        this.drawPoint(scaledX, scaledY, r, "blue");
 
         let data = {
             x: scaledX,
             y: scaledY,
             r: r
         };
-        window.location.replace("./controller?" + $.param(data));
+        let thisClass = this;
+        $.ajax({
+            url: "./controller?" + $.param(data),
+            type: "GET",
+            success: function (data) {
+                HistoryManager.addRecord(data.x, data.y, data.r, data.isHit, data.createdAt, data.scriptTime);
+
+                let color;
+                if (data.isHit) color = "green"
+                else color = "red";
+                thisClass.drawPoint(scaledX, scaledY, r, color);
+            },
+            error: function (xhr, status, error) {
+                swal(
+                    `Ошибка ${xhr.status}`,
+                    `Во время выполнения запроса произошла ошибка\n(${xhr.responseJSON.message})`,
+                    "error"
+                )
+            }
+        });
     }
 }

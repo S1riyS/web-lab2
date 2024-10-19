@@ -1,13 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="ru.s1riys.lab2.models.Result" %>
 <%@ page import="ru.s1riys.lab2.models.ResultsListBean" %>
+<%@ page import="java.util.Collections" %>
 
 <!DOCTYPE html>
 <html lang="ru-RU">
 
 <head>
     <meta charset="UTF-8">
-    <title>Лабораторная работа №1</title>
+    <title>Лабораторная работа №2</title>
 
     <!--  JS  -->
     <script src="js/libs/jquery-3.7.1.min.js"></script>
@@ -25,11 +26,11 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="media/logo.png" alt="" width="24" height="24" class="d-inline-block align-text-top">
-            Лабораторная работа №1
+            Лабораторная работа №2
         </a>
         <div class="d-flex align-items-center justify-content-center">
             Анкудинов Кирилл Константинович, P3218
-            <a href="https://github.com/S1riyS/web-lab-1" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/S1riyS/web-lab2" target="_blank" rel="noopener noreferrer">
                 <button type="button" id="github-button" class="btn btn-secondary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-github" viewBox="0 0 16 16">
@@ -73,27 +74,27 @@
                         </div>
                         <div class="col-md-6">
                             <label for="r-input" class="form-label">Радиус R</label>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="r-input"
                                     id="r1" value="1" required>
                                 <label class="form-check-label" for="r1">1</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="r-input"
                                     id="r2" value="2" required>
                                 <label class="form-check-label" for="r2">2</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="r-input"
                                     id="r3" value="3" required>
                                 <label class="form-check-label" for="r3">3</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="r-input"
                                     id="r4" value="4" required>
                                 <label class="form-check-label" for="r4">4</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="r-input"
                                     id="r5" value="5" required>
                                 <label class="form-check-label" for="r5">5</label>
@@ -106,7 +107,7 @@
         </div>
         
         <% ResultsListBean bean = (ResultsListBean) request.getSession().getAttribute("resultListBean"); %>
-
+    
         <div class="col-7">
             <div class="history-box box table-scroll">
                 <table class="table table-striped table-hover table-bordered table-sm">
@@ -122,6 +123,7 @@
                     </thead>
                     <tbody id="history-table-body">
                         <% if (bean != null && !bean.getResults().isEmpty()) { %>
+                            <% Collections.reverse(bean.getResults()); %>
                             <% for (Result result : bean.getResults()) { %>
                                 <tr>
                                     <td><%= result.getX() %></td>
