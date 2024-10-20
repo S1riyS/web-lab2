@@ -1,5 +1,4 @@
 export default class Validator {
-    static _ALLOWED_X_VALUES = ["-2", "-1.5", "-1", "-0.5", "0", "0.5", "1", "1.5", "2"]
     static _ALLOWED_R_VALUES = ["1", "2", "3", "4", "5"]
     static _NUMBER_REGEXP = /^-?\d*\.?\d*$/
 
@@ -10,7 +9,10 @@ export default class Validator {
         let isNumber = Validator._NUMBER_REGEXP.test(x);
         if (!isNumber) return false;
 
-        return Validator._ALLOWED_X_VALUES.includes(x)
+        let geNegative2 = bigDecimal.compareTo(x, "-2") >= 0;
+        let lePositive2 = bigDecimal.compareTo("2", x) >= 0;
+
+        return geNegative2 && lePositive2;
     }
 
     static $validateY(y) {

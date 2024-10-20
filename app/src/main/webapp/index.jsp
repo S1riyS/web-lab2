@@ -18,6 +18,7 @@
     <!--  CSS  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/index.css">
 </head>
 
@@ -51,7 +52,7 @@
 
             <div class="params-box box">
                 <div class="col-md-12">
-                    <form class="row g-3">
+                    <form class="row g-3" id="form">
                         <div class="col-md-6">
                             <label for="x-select" class="form-label">Координата X</label>
                             <select class="form-select" id="x-select" name="x-select" required>
@@ -73,31 +74,28 @@
                             placeholder="Число от -3 до 5" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="r-input" class="form-label">Радиус R</label>
+                        <label for="r-input" class="form-label">Радиус R</label>
+                        <div class="d-flex">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="r-input"
-                                    id="r1" value="1" required>
+                                <input class="form-check-input" type="radio" name="r-input" d="r1" value="1" required>
                                 <label class="form-check-label" for="r1">1</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="r-input"
-                                    id="r2" value="2" required>
+                                <input class="form-check-input" type="radio" name="r-input" id="r2" value="2" required>
                                 <label class="form-check-label" for="r2">2</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="r-input"
-                                    id="r3" value="3" required>
+                                <input class="form-check-input" type="radio" name="r-input" id="r3" value="3" required>
                                 <label class="form-check-label" for="r3">3</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="r-input"
-                                    id="r4" value="4" required>
+                                <input class="form-check-input" type="radio" name="r-input" id="r4" value="4" required>
                                 <label class="form-check-label" for="r4">4</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="r-input"
-                                    id="r5" value="5" required>
+                                <input class="form-check-input" type="radio" name="r-input" id="r5" value="5" required>
                                 <label class="form-check-label" for="r5">5</label>
+                            </div>
                             </div>
                         </div>
                         <button id="submit" class="btn btn-primary" type="submit">Проверить</button>
@@ -108,7 +106,10 @@
         
         <% ResultsListBean bean = (ResultsListBean) request.getSession().getAttribute("resultListBean"); %>
     
-        <div class="col-7">
+        <div class="col-7 d-grid gap-1">
+            <button type="button" class="btn btn-md btn-outline-primary" id="update-history-button">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
+            </button>
             <div class="history-box box table-scroll">
                 <table class="table table-striped table-hover table-bordered table-sm">
                     <thead>
@@ -122,23 +123,7 @@
                     </tr>
                     </thead>
                     <tbody id="history-table-body">
-                        <% if (bean != null && !bean.getResults().isEmpty()) { %>
-                            <% Collections.reverse(bean.getResults()); %>
-                            <% for (Result result : bean.getResults()) { %>
-                                <tr>
-                                    <td><%= result.getX() %></td>
-                                    <td><%= result.getY() %></td>
-                                    <td><%= result.getR() %></td>
-                                    <% if (result.isHit()) { %>
-                                        <td class="hit">Попадание</td>
-                                     <% } else { %>
-                                        <td class="miss">Промах</td>
-                                     <% } %>
-                                    <td><%= result.getCreatedAt() %></td>
-                                    <td><%= result.getScriptTime() %></td>
-                                </tr>
-                            <% } %>
-                        <% } %>
+                        
                     </tbody>
                 </table>
             </div>
