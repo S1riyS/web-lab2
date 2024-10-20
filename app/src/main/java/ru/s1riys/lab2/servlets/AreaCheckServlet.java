@@ -3,6 +3,7 @@ package ru.s1riys.lab2.servlets;
 import java.io.IOException;
 
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -38,7 +39,6 @@ public class AreaCheckServlet extends HttpServlet {
         // }
 
         Object originalRequestURI = request.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
-        System.out.println(originalRequestURI);
         if (originalRequestURI == null) {
             httpUtil.sendError(404, "Page not found");
             return;
@@ -48,8 +48,11 @@ public class AreaCheckServlet extends HttpServlet {
         Float y = Float.parseFloat(request.getParameter("y"));
         Float r = Float.parseFloat(request.getParameter("r"));
 
+        // Current time
+        long currentTime = System.currentTimeMillis();
+
         // Result
-        Result result = new Result(x, y, r, System.currentTimeMillis() - startTime);
+        Result result = new Result(x, y, r, currentTime - startTime);
 
         // Save to bean
         HttpSession session = request.getSession();
@@ -60,10 +63,9 @@ public class AreaCheckServlet extends HttpServlet {
         }
         resultsListBean.addResult(result);
 
-        httpUtil.sendResult(result);
+        ServletContext ctx = getServletContext();
+        ctx.setAttribute(Config.LAST_RESULTS_UPDATE_TIME, currentTime);
 
-        // Forward to result.jsp
-        // request.setAttribute("result", result);
-        // request.getRequestDispatcher("/result.jsp").forward(request, response);
+        httpUtil.sendResult(result);
     }
 }
