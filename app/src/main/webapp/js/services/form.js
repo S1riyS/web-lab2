@@ -1,11 +1,14 @@
 export default class FormService {
     constructor(formId, requestService) {
         this.form = $("#" + formId);
-        this.form.on("submit", (event) => this.handleSubmit(event));
+        this.form.on("submit", (event) => this.$handleSubmit(event));
         this.requestService = requestService;
+
+        this.radiusChangeObservers = []
+        $("input[name='r-input']").on("change", () => this.$radiusChangeHandler());
     }
 
-    handleSubmit(event) {
+    $handleSubmit(event) {
         let form = $("form");
         let valid = form[0].checkValidity();
         if (valid) event.preventDefault();
@@ -34,6 +37,15 @@ export default class FormService {
             y: this.getY(),
             r: this.getR(),
         };
+    }
+
+    $radiusChangeHandler(event) {
+        let newR = this.getR();
+        this.radiusChangeObservers.forEach((observer) => observer.onRadiusChange(newR));
+    }
+
+    addRadiusChangeObserver(observer) {
+        this.radiusChangeObservers.push(observer)
     }
 }
 

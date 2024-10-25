@@ -5,15 +5,20 @@ import FormService from "./services/form.js";
 
 function onInit() {
     const requestService = new RequestService();
-    requestService.updateHistory();
 
     const formService = new FormService("form", requestService);
     const graphService = new GraphService("graph", formService, requestService);
     const historyService = new HistoryService("history-table-body", "update-history-button", requestService);
 
+    // Adding observers for radius change
+    formService.addRadiusChangeObserver(graphService);
+
+    // Updating history
+    requestService.updateHistory();
+    // Adding observers for check response
     requestService.addCheckResposeObserver(historyService);
     requestService.addCheckResposeObserver(graphService);
-
+    // Adding observers for history update
     requestService.addHistoryUpdateResponseObserver(historyService);
     requestService.addHistoryUpdateResponseObserver(graphService);
 }

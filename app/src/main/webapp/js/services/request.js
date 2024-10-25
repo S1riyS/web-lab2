@@ -39,9 +39,7 @@ export default class RequestService {
             url: "/app/history",
             type: "GET",
             beforeSend: function (request) {
-                if (this.lastRequestTime) {
-                    request.setRequestHeader("If-Modified-Since", this.lastRequestTime);
-                }
+                thisClass.$setHeader(request, "If-Modified-Since", this.lastRequestTime);
             }.bind(this),
             statusCode: {
                 304: function () {
@@ -67,5 +65,11 @@ export default class RequestService {
 
     addHistoryUpdateResponseObserver(observer) {
         this.historyUpdateResponseObservers.push(observer)
+    }
+
+    $setHeader(request, key, value) {
+        if (value !== null) {
+            request.setRequestHeader(key, value);
+        }
     }
 }

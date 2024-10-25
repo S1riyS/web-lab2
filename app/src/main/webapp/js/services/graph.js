@@ -5,16 +5,39 @@ const H = 400;
 export default class GraphService {
     constructor(graphId, formService, requestService) {
         this.canvas = document.getElementById(graphId);
-        this.canvas.addEventListener("click", (event) => this.clickHandler(event))
+        this.canvas.addEventListener("click", (event) => this.$clickHandler(event))
         this.ctx = this.canvas.getContext("2d");
+
+        this.labelsLayerCanvas = this.createLayer(this.canvas);
+        this.labelsLayerCtx = this.labelsLayerCanvas.getContext("2d");
+
+        console.log(this.labelsLayerCtx)
 
         this.formService = formService
         this.requestService = requestService
+
         this.init();
     }
 
     init() {
         this.drawGraph();
+        this.drawLables(null);
+    }
+
+    createLayer(mainCanvas) {
+        let layer = document.createElement('canvas');
+        layer.width = mainCanvas.width;
+        layer.height = mainCanvas.height;
+        return layer;
+    }
+
+    drawLayer(layerContext) {
+        this.ctx.drawImage(layerContext.canvas, 0, 0);
+    }
+
+    clearLayer(layerContext) {
+        layerContext.clearRect(0, 0, 400, 400);
+        console.log("cleared")
     }
 
     drawGraph() {
@@ -83,22 +106,40 @@ export default class GraphService {
         this.ctx.lineTo(centerX + 5, centerY + D / 2);
 
         this.ctx.stroke();
+    }
+
+    drawLables(value) {
+
+        let centerX = W / 2;
+        let centerY = H / 2;
+
+        let R;
+        let RHalf;
+        if (value === null) {
+            R = "R";
+            RHalf = "R/2";
+        } else {
+            R = value;
+            RHalf = value / 2;
+        }
 
         // labels
-        this.ctx.font = "14px Arial";
-        this.ctx.fillStyle = "black";
-        this.ctx.fillText("X", W - 10, centerY - 5);
-        this.ctx.fillText("Y", centerX + 5, 10);
+        this.labelsLayerCtx.font = "14px Arial";
+        this.labelsLayerCtx.fillStyle = "black";
+        this.labelsLayerCtx.fillText("X", W - 10, centerY - 5);
+        this.labelsLayerCtx.fillText("Y", centerX + 5, 10);
 
-        this.ctx.fillText("R", centerX + D - 5, centerY - 10);
-        this.ctx.fillText("R/2", centerX + D / 2 - 5, centerY - 10);
-        this.ctx.fillText("R", centerX - D - 5, centerY - 10);
-        this.ctx.fillText("R/2", centerX - D / 2 - 5, centerY - 10);
+        this.labelsLayerCtx.fillText(R, centerX + D - 5, centerY - 10);
+        this.labelsLayerCtx.fillText(RHalf, centerX + D / 2 - 5, centerY - 10);
+        this.labelsLayerCtx.fillText(R, centerX - D - 5, centerY - 10);
+        this.labelsLayerCtx.fillText(RHalf, centerX - D / 2 - 5, centerY - 10);
 
-        this.ctx.fillText("R", centerX + 5, centerY - D + 5);
-        this.ctx.fillText("R/2", centerX + 5, centerY - D / 2 + 5);
-        this.ctx.fillText("R", centerX + 5, centerY + D + 5);
-        this.ctx.fillText("R/2", centerX + 5, centerY + D / 2 + 5);
+        this.labelsLayerCtx.fillText(R, centerX + 5, centerY - D + 5);
+        this.labelsLayerCtx.fillText(RHalf, centerX + 5, centerY - D / 2 + 5);
+        this.labelsLayerCtx.fillText(R, centerX + 5, centerY + D + 5);
+        this.labelsLayerCtx.fillText(RHalf, centerX + 5, centerY + D / 2 + 5);
+
+        this.drawLayer(this.labelsLayerCtx);
     }
 
     drawPoint(x, y, r, isHit) {
@@ -116,7 +157,7 @@ export default class GraphService {
         this.ctx.fill();
     }
 
-    clickHandler(event) {
+    $clickHandler(event) {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left - W / 2;
         const y = -(event.clientY - rect.top - H / 2);
@@ -151,5 +192,9 @@ export default class GraphService {
             console.log(current_record)
             this.drawPoint(current_record.x, current_record.y, current_record.r, current_record.isHit);
         }
+    }
+
+    onRadiusChange(r) {
+        // this.drawLables(r);
     }
 }
